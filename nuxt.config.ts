@@ -5,13 +5,13 @@ export default defineNuxtConfig({
     transpile: ['vuetify'],
   },
   modules: [
+    '@nuxt/content',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
-    //...
   ],
   vite: {
     vue: {
@@ -20,4 +20,8 @@ export default defineNuxtConfig({
       },
     },
   },
+  devServer: {
+    host: '0.0.0.0',
+    port: 5000
+  }
 })
