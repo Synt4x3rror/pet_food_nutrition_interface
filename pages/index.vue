@@ -1,6 +1,7 @@
 <template>
     <v-sheet width="100vw" height="100vh" color="grey">
-        <v-container fluid class="fill-height"> 
+        <v-container fluid class="fill-height">
+            <ProductInfoDialog :itemSelected="selectedItem"/>
             <v-row justify="center" align="center">
                 <v-card height="90vh" width="95vw">
                     <v-card-title>Cat Food Info</v-card-title>
@@ -13,7 +14,7 @@
                         >
                             <template v-slot:[`item.img_url`]="{ value }">
                                 <v-sheet width="150">
-                                    <v-img :src="value" alt="productImage"></v-img>
+                                    <v-img :src="value" alt="productImage" @click="handleProductSelected(value)"></v-img>
                                 </v-sheet>
                             </template>
                             <template v-slot:[`item.dmb_fat`]="{ value }">
@@ -37,8 +38,8 @@ export default {
     data() {
         return {
             products,
-            selectedItem: null,
-            displayOverlay: false,
+            selectedItem: {},
+            displayOverlay: true,
             headers: [
                 { title: 'Image', key: 'img_url', sortable: false, align: 'center'},
                 { title: 'Name', key: 'name', sortable: true, align: 'center' },
@@ -59,6 +60,22 @@ export default {
                 }
             }
             return data
+        }
+    },
+
+    mounted () {
+        const { $event } = useNuxtApp()
+
+        this.toggleDialog = () => {
+            $event('info:toggleDialog')
+        }
+    },
+
+    methods: {
+        handleProductSelected (img_url) {
+            // Use Image URL to determine item selected
+            this.selectedItem = this.fixedData.filter((el)=> el.img_url === img_url)[0]
+            this.toggleDialog()
         }
     }
 }
