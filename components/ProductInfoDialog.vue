@@ -2,14 +2,15 @@
     <v-overlay v-model="showOverlay" width="100vw" height="100vh">
         <v-container fluid class="fill-height">
             <v-row justify="center" align="center">
-                <v-card height="75vh" width="85vw">
+                <v-card height="75vh" :width="getComponentWidth">
                     <v-card-title>{{ itemSelected.name }}</v-card-title>
                     <v-row justify="center">
                         <v-img :src="itemSelected.img_url" alt="product image" height="30vh"></v-img>
                     </v-row>
                     <v-row justify="center">
+                        <v-col></v-col>
                         <v-col>
-                            <h5>{{ showDMB? 'Analysis Percentage' : 'Dry Matter Basis Percentage' }}</h5>
+                            <h5>{{ showDMB? 'Dry Matter Basis Percentage' : 'Analysis Percentage' }}</h5>
                         </v-col>
                         <v-col>
                             <NuxtLink :to="itemSelected.url" target="_blank">
@@ -20,7 +21,7 @@
                             <v-icon @click="showOverlay=false">mdi-close</v-icon>
                         </v-col>
                     </v-row>
-                    <v-sheet class="mt-3" width="85vw">
+                    <v-sheet class="mt-3" :width="getComponentWidth">
                         <v-container fluid>
                             <v-table>
                                 <tr v-for="(item, key, index) in getRelevantItems" :key="index">
@@ -73,7 +74,11 @@ export default {
             // Remove properties with value 0 from analysis percentage
             items = Object.fromEntries(Object.entries(items).filter(([key, value])=> value !== 0))
             return items
-        }
+        },
+
+        getComponentWidth() {
+            return this.$vuetify.display.mobile ? '85vw' : '30vw'
+        } 
     },
 
     methods: {
